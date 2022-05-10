@@ -2,7 +2,7 @@ import time
 import PySimpleGUI as sg
 
 from Crypto.Util import strxor
-
+from Crypto.Random import get_random_bytes
 
 def form(client, devices):
 	device_columns = []
@@ -32,6 +32,7 @@ def form(client, devices):
 		[sg.Column(
 			device_columns,
 		)],
+		[sg.Button('Add Device', key=('add', None))]
 	]
 	return sg.Window(title(), layout, finalize=True)
 
@@ -45,14 +46,20 @@ def toggle(event, values, client, server):
 	K = strxor.strxor(client.I, client.random)
 	TIMESTAMP = int(time.time()).to_bytes(4, 'big')
 
-	print('>>>>>CLIENT CALCULATIONS')
-	print('I        ', I.hex())
-	print('K        ', K.hex())
-	print('Timestamp', TIMESTAMP.hex())
-	print('------------------------\n')
+	print('\nCLIENT CALLS API TO SWITCH LIGHT')
+	print('\tI-user', I.hex())
+	print('\tK-user', K.hex())
+	print('\tTimestamp', TIMESTAMP.hex())
 
 	success = server.api(client.username, client.jwt, K, device_id, TIMESTAMP)
 
 	if not success:
 		raise Exception('Server call failed!')
+
+def add(event, values, client, server):
+	print('\nDEVICE BEING ADDED')
+	Rdevice = get_random_bytes(32)
+	print('\tR-device:', Rdevice.hex())
+
+	server.addDevice(Rdevice, client)
 

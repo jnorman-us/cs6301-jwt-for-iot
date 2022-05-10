@@ -36,11 +36,10 @@ def login(event, values, client, server):
 
 	E = strxor.strxor(I, HPW)
 
-	print('>>>>>CLIENT CALCULATIONS')
-	print('I              ', I.hex())
-	print('Hashed Password', HPW.hex())
-	print('E              ', E.hex())
-	print('------------------------\n')
+	print('\nCLIENT LOGGING IN')
+	print('\tI-user', I.hex())
+	print('\tHashed-Password', HPW.hex())
+	print('\tE-k', E.hex())
 
 	success, jwt, random = server.login(username, E, HPW)
 

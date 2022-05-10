@@ -36,6 +36,10 @@ def main():
 
 						window.close()
 						window = devices.form(client, getDevices())
+					if command == 'add':
+						devices.add(event, values, client, server)
+						window.close()
+						window = devices.form(client, getDevices())
 			except Exception as e:
 				traceback.print_exc()
 				print(e)
